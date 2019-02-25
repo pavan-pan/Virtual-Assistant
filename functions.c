@@ -1,6 +1,6 @@
 
 
-/* 
+/*
  * File:   functions.c
  * Author: Goodluck
  * Author: Riya
@@ -8,29 +8,11 @@
  * Created on April 9, 2018, 3:41 PM
  */
 
-#ifndef FUNCTIONS_H
-#define FUNCTIONS_H
+#include "functions.h"
 
-#ifdef __cplusplus
-extern "H" {
-#endif
-
-
-
-
-#ifdef __cplusplus
-}
-#endif
-
-
-#define SPACE ' '
 
 //Function used by libcurl to allocate memory to data received from the HTTP response
-
-struct MemoryStruct {
-    char *memory;
-    size_t size;
-};
+MemoryStruct_t MemoryStruct;
 
 static size_t
 WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp) {
@@ -53,12 +35,7 @@ WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp) {
     return realsize;
 }
 
-struct string {
-    char *ptr;
-    size_t len;
-};
-
-void init_string(struct string *s) {
+void init_string(string_t *s) {
     s->len = 0;
     s->ptr = malloc(s->len + 1);
     if (s->ptr == NULL) {
@@ -69,7 +46,7 @@ void init_string(struct string *s) {
 }
 
 static size_t WriteFunct(void *ptr, size_t size, size_t nmemb, void *userp) {
-    struct string *s = (struct string *) userp;
+    string_t *s = (string_t *) userp;
     size_t new_len = s->len + size*nmemb;
     s->ptr = realloc(s->ptr, new_len + 1);
     if (s->ptr == NULL) {
@@ -108,7 +85,7 @@ int find_restaurants() {
     printf("Please enter your area/locality\n\n");
     fgets(address, 1000, stdin);
 
-    //-----------------------Google Geocoding API to convert Area name into co-ordinates needed by Places API------------------------	
+    //-----------------------Google Geocoding API to convert Area name into co-ordinates needed by Places API------------------------
 
     if (curl) {
         encoded_address = curl_easy_escape(curl, address, 0);
@@ -309,7 +286,7 @@ int show_weather(char* weather) {
     CURL *curl_weather = NULL;
     CURLcode result_weather;
     curl_weather = curl_easy_init();
-    struct string s;
+    string_t s;
     init_string(&s);
     curl_easy_setopt(curl_weather, CURLOPT_URL, weather);
     curl_easy_setopt(curl_weather, CURLOPT_HTTPGET, 1);
@@ -321,6 +298,4 @@ int show_weather(char* weather) {
     return 0;
 }
 
-
-#endif /* FUNCTIONS_C */
 

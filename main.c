@@ -1,3 +1,13 @@
+/*
+ ============================================================================
+ Name        : code_restructuring_2.c
+ Author      : 
+ Version     :
+ Copyright   : Your copyright notice
+ Description : Hello World in C, Ansi-style
+ ============================================================================
+ */
+
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -5,41 +15,28 @@
 #include <curl/curl.h>
 #include <json-c/json_object.h>
 #include <json-c/json_tokener.h>
-#include "functions.c"
 
+#include "interface.h"
+#include "parameter.h"
 
-int main() {
-    
-#include "init_config.c"
+int main(void) {
 
-    //Inform user about preferred media player, as to config file
-    char preferred_media_player[1000];
-    sprintf(preferred_media_player, "say Your preferred media player is %s", M_P);
-    system(preferred_media_player);
-    
-    //Inform user about preferred web browser, as to config file
-    char preferred_webbrowser[1000];
-    sprintf(preferred_webbrowser, "say Your preferred webbrowser is %s", WebBrowser);
-    system(preferred_webbrowser);
+	//Getting home directory out of configuration file
 
-    do {
-        
-        //---------------------------------------------------------------------------------------------------------------------
-        
-        //Artificial Intelligence 
-#include "requests.c"
-        //Artificial Intelligence {REQUESTS}
-        
-#include "analysis.c"
-        //Artificial Intelligence {ANALYSIS}
-        
-#include "response.c"
-        //Artificial Intelligence {RESPONSE}
+	char str[1000];
 
-        //---------------------------------------------------------------------------------------------------------------------
+	if (get_parameters())
+		return 1;
 
-    } while ((strcmp(str, "stop") != 0));
+	do{
+		send_to_ui ("Hey, How can I help you?");
+		get_from_ui (str);
 
-    return 0;
+		printf ("user input is :%s\n", str);
 
+		analyse_user_input(str);
+
+	}while ((strcmp(str, "stop") != 0));
+
+	return EXIT_SUCCESS;
 }
